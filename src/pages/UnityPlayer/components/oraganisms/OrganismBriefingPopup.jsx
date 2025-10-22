@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 
 // --- API 호출 시뮬레이션 ---
 const sampleBriefings = [
@@ -81,7 +80,7 @@ const OrganismBriefingPopup = ({ isOpen, onClose }) => {
           {isLoading ? (
             <p>새로운 브리핑을 가져오는 중...</p>
           ) : (
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{markdownContent}</ReactMarkdown>
+            <ReactMarkdown>{markdownContent}</ReactMarkdown>
           )}
         </Contents>
       </PopupContainer>

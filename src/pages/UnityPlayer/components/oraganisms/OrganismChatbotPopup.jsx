@@ -1,41 +1,50 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useLayoutEffect, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 
 const OrganismChatbotPopup = ({ isOpen, onClose }) => {
-  // --- State Management ---
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      sender: 'bot',
-      text: '안녕하세요! 저는 이 디지털 트윈의 AI 챗봇입니다. 궁금한 점을 질문해 주시면 성실하게 답변해드리겠습니다.',
-    },
-  ]);
+ 
+  // useState의 초기값 함수를 사용하여 컴포넌트가 처음 로드될 때 localStorage에서 데이터를 가져옵니다.
+  const [messages, setMessages] = useState(() => {
+    try {
+      const storedMessages = localStorage.getItem('chatMessages');
+      // 저장된 메시지가 있거나, 내용이 있는 배열이면 파싱해서 반환합니다.
+      if (storedMessages && storedMessages !== '[]') {
+        return JSON.parse(storedMessages);
+      }
+      // 없으면 초기 메시지를 반환합니다.
+      return [
+        {
+          id: 1,
+          sender: 'bot',
+          text: '안녕하세요! 저는 이 디지털 트윈의 AI 챗봇입니다. 궁금한 점을 질문해 주시면 성실하게 답변해드리겠습니다.',
+        },
+      ];
+    } catch (error) {
+      console.error("Error reading chat messages from localStorage", error);
+      return []; 
+    }
+  });
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const contentsRef = useRef(null);
 
-  // 채팅 내용이 업데이트될 때마다 스크롤을 최하단으로 이동
-  useEffect(() => {
-    if (contentsRef.current) {
+  // 메시지가 업데이트될 때마다 localStorage에 저장하고 스크롤을 맨 아래로 이동시킵니다.
+  useLayoutEffect(() => {
+    localStorage.setItem('chatMessages', JSON.stringify(messages));
+    if (isOpen && contentsRef.current) {
       contentsRef.current.scrollTop = contentsRef.current.scrollHeight;
     }
-  }, [messages, isTyping]);
+  }, [isOpen, messages, isTyping]);
 
   if (!isOpen) {
     return null;
   }
 
-  console.log(messages)
-
-  
-  
-  // --- Handlers ---
   const handleSendMessage = async () => {
     if (inputValue.trim() === '' || isTyping) return;
 
     const textToProcess = inputValue;
     
-    // 먼저 사용자 메시지를 화면에 표시하고 입력창을 비웁니다.
     const userMessage = {
       id: Date.now(),
       sender: 'user',
@@ -45,7 +54,6 @@ const OrganismChatbotPopup = ({ isOpen, onClose }) => {
     setInputValue('');
     setIsTyping(true);
 
-    // 봇의 응답을 시뮬레이션합니다. (await를 사용하여 비동기 작업을 기다립니다)
     await new Promise(resolve => setTimeout(resolve, 1500));
 
       const botResponse = {
