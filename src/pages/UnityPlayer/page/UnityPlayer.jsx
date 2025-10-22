@@ -58,8 +58,8 @@ const LoadingOverlay = styled.div`
 const ButtonContainer = styled.div`
   position: absolute;
   top: 20px;
-  left: 20px;
-  z-index: 2;
+  left: 20px; 
+  z-index: 11; /* 팝업(z-index: 10)보다 위에 오도록 수정 */
   display: flex;
   flex-direction: column;
   gap: 10px;

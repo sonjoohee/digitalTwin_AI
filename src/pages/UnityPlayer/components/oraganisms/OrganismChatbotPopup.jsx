@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 
 const OrganismChatbotPopup = ({ isOpen, onClose }) => {
-  // --- State Management ---
+
   // useState의 초기값 함수를 사용하여 컴포넌트가 처음 로드될 때 localStorage에서 데이터를 가져옵니다.
   const [messages, setMessages] = useState(() => {
     try {
@@ -30,7 +30,7 @@ const OrganismChatbotPopup = ({ isOpen, onClose }) => {
   const inputRef = useRef(null);
 
   // 메시지가 업데이트될 때마다 localStorage에 저장하고 스크롤을 맨 아래로 이동시킵니다.
-  useLayoutEffect(() => {
+  useEffect(() => {
     localStorage.setItem('chatMessages', JSON.stringify(messages));
     if (isOpen && contentsRef.current) {
       contentsRef.current.scrollTop = contentsRef.current.scrollHeight;
@@ -47,7 +47,7 @@ const OrganismChatbotPopup = ({ isOpen, onClose }) => {
   if (!isOpen) {
     return null;
   }
-
+ 
   const handleSendMessage = async () => {
     if (inputValue.trim() === '' || isTyping) return;
 
@@ -96,7 +96,7 @@ const OrganismChatbotPopup = ({ isOpen, onClose }) => {
         <Contents 
           ref={contentsRef} 
           // 팝업이 열릴 때 스크롤 점프 현상을 막기 위해 초기에는 숨깁니다.
-          style={{ opacity: isOpen ? 1 : 0 }}
+          style={{ opacity: isOpen ? 1 : 0, transition: 'opacity 0.1s' }}
         >
           {messages.map((msg) => (
             <ChatItem key={msg.id} sender={msg.sender}>
