@@ -1,8 +1,8 @@
-import React, { useState, useLayoutEffect, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 
 const OrganismChatbotPopup = ({ isOpen, onClose }) => {
- 
+  // --- State Management ---
   // useState의 초기값 함수를 사용하여 컴포넌트가 처음 로드될 때 localStorage에서 데이터를 가져옵니다.
   const [messages, setMessages] = useState(() => {
     try {
@@ -21,12 +21,13 @@ const OrganismChatbotPopup = ({ isOpen, onClose }) => {
       ];
     } catch (error) {
       console.error("Error reading chat messages from localStorage", error);
-      return []; 
+      return []; // 오류 발생 시 빈 배열 반환
     }
   });
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const contentsRef = useRef(null);
+  const inputRef = useRef(null); // 입력 필드를 위한 ref 추가
 
   // 메시지가 업데이트될 때마다 localStorage에 저장하고 스크롤을 맨 아래로 이동시킵니다.
   useLayoutEffect(() => {
@@ -36,15 +37,28 @@ const OrganismChatbotPopup = ({ isOpen, onClose }) => {
     }
   }, [isOpen, messages, isTyping]);
 
+  // isTyping 상태가 false로 변경될 때 (봇 응답 완료 시) input에 포커스를 줍니다.
+  useEffect(() => {
+    if (!isTyping && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isTyping]);
+
   if (!isOpen) {
     return null;
   }
 
+  console.log(messages)
+
+  
+  
+  // --- Handlers ---
   const handleSendMessage = async () => {
     if (inputValue.trim() === '' || isTyping) return;
 
     const textToProcess = inputValue;
     
+    // 먼저 사용자 메시지를 화면에 표시하고 입력창을 비웁니다.
     const userMessage = {
       id: Date.now(),
       sender: 'user',
@@ -54,6 +68,7 @@ const OrganismChatbotPopup = ({ isOpen, onClose }) => {
     setInputValue('');
     setIsTyping(true);
 
+    // 봇의 응답을 시뮬레이션합니다. (await를 사용하여 비동기 작업을 기다립니다)
     await new Promise(resolve => setTimeout(resolve, 1500));
 
       const botResponse = {
@@ -102,6 +117,7 @@ const OrganismChatbotPopup = ({ isOpen, onClose }) => {
         <ChatFooter>
           <ChatInput>
             <input
+              ref={inputRef} // ref 연결
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
