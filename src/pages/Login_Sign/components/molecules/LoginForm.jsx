@@ -5,8 +5,8 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { isValidEmail } from "../atoms/AtomValidation";
 import {
   login,
-} from "../../../../utils/indexedDb";
-import { useAtom } from "jotai";
+} from "../../../../utils/indexedDB";
+import { useAtom } from 'jotai';
 import { USER_EMAIL, USER_NAME } from "../../../../AtomStates";
 
 const LoginForm = () => {
@@ -59,7 +59,7 @@ const LoginForm = () => {
     //   DeviceDetectionService.saveToSession(deviceType);
     //   console.log("🔐 로그인 시 기기 감지 및 저장:", deviceType);
 
-      navigate("/DashBoard");
+      navigate("/");
     } catch (error) {
       if (
         error.response &&

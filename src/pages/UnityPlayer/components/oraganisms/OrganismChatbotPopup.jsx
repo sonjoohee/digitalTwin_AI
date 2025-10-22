@@ -27,7 +27,7 @@ const OrganismChatbotPopup = ({ isOpen, onClose }) => {
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const contentsRef = useRef(null);
-  const inputRef = useRef(null); // 입력 필드를 위한 ref 추가
+  const inputRef = useRef(null);
 
   // 메시지가 업데이트될 때마다 localStorage에 저장하고 스크롤을 맨 아래로 이동시킵니다.
   useLayoutEffect(() => {
@@ -48,11 +48,6 @@ const OrganismChatbotPopup = ({ isOpen, onClose }) => {
     return null;
   }
 
-  console.log(messages)
-
-  
-  
-  // --- Handlers ---
   const handleSendMessage = async () => {
     if (inputValue.trim() === '' || isTyping) return;
 
@@ -98,7 +93,11 @@ const OrganismChatbotPopup = ({ isOpen, onClose }) => {
         <Header>
           <Title>AI 챗봇</Title>
         </Header>
-        <Contents ref={contentsRef}>
+        <Contents 
+          ref={contentsRef} 
+          // 팝업이 열릴 때 스크롤 점프 현상을 막기 위해 초기에는 숨깁니다.
+          style={{ opacity: isOpen ? 1 : 0 }}
+        >
           {messages.map((msg) => (
             <ChatItem key={msg.id} sender={msg.sender}>
               <ChatBox sender={msg.sender}>
@@ -117,7 +116,7 @@ const OrganismChatbotPopup = ({ isOpen, onClose }) => {
         <ChatFooter>
           <ChatInput>
             <input
-              ref={inputRef} // ref 연결
+              ref={inputRef}
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}

@@ -2,7 +2,7 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
 import { USER_NAME, USER_EMAIL, SHOULD_LOGOUT } from '../AtomStates';
-import { userInfo, requestAccessToken } from './indexedDb';
+import { userInfo, requestAccessToken } from './indexedDB';
 
 // 토큰 존재 여부 확인 및 유저 정보 로드
 export const RequireToken = () =>{
