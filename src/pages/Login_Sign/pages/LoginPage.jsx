@@ -15,9 +15,9 @@ const OrganismIncLogin = () => {
         <MainContent Wide>
           <LoginWrap>
             <TitleSection>
-              <h1 style={{ margin: 0}}>AI 분석 솔루션</h1>
+              <h1 style={{ margin: 0}}>디지털 트윈 AI</h1>
               <DescriptionText>
-                하드웨어 인터페이스 AI 자동 분석 솔루션
+                디지털 트윈 모델 모범 시범
               </DescriptionText>
             </TitleSection>
             <LoginForm />

@@ -5,7 +5,7 @@ import ChatbotPopup from '../components/oraganisms/OrganismChatbotPopup.jsx';
 import BriefingPopup from '../components/oraganisms/OrganismBriefingPopup.jsx';
 
 const UnityPlayer = () => {
-  const { unityProvider, isLoaded, loadingProgression } = useUnityContext({
+  const { unityProvider, isLoaded } = useUnityContext({
     // public 폴더를 기준으로 경로를 작성합니다.
     loaderUrl: "Unity/Builds/Builds.loader.js",
     dataUrl: "Unity/Builds/Builds.data",
@@ -18,17 +18,9 @@ const UnityPlayer = () => {
 
   const [activePopup, setActivePopup] = useState(null);
 
-  const loadingPercentage = Math.round(loadingProgression * 100);
-
-
   return (
     <React.Fragment>
-      {!isLoaded && (
-        <LoadingOverlay>
-          <p>Loading... ({loadingPercentage}%)</p>
-        </LoadingOverlay>
-      )}
-      {/* 로딩이 완료되면 버튼들을 화면 좌측 상단에 표시합니다. */}
+     
       {isLoaded && (
         <ButtonContainer>
           <StyledButton onClick={() => setActivePopup('chatbot')} isActive={activePopup === 'chatbot'}>챗봇</StyledButton>
