@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 
 const OrganismChatbotPopup = ({ isOpen, onClose }) => {
@@ -30,7 +30,7 @@ const OrganismChatbotPopup = ({ isOpen, onClose }) => {
   const inputRef = useRef(null);
 
   // 메시지가 업데이트될 때마다 localStorage에 저장하고 스크롤을 맨 아래로 이동시킵니다.
-  useEffect(() => {
+  useLayoutEffect(() => {
     localStorage.setItem('chatMessages', JSON.stringify(messages));
     if (isOpen && contentsRef.current) {
       contentsRef.current.scrollTop = contentsRef.current.scrollHeight;
@@ -43,11 +43,8 @@ const OrganismChatbotPopup = ({ isOpen, onClose }) => {
       inputRef.current.focus();
     }
   }, [isTyping]);
+  
 
-  if (!isOpen) {
-    return null;
-  }
- 
   const handleSendMessage = async () => {
     if (inputValue.trim() === '' || isTyping) return;
 
@@ -63,7 +60,6 @@ const OrganismChatbotPopup = ({ isOpen, onClose }) => {
     setInputValue('');
     setIsTyping(true);
 
-    // 봇의 응답을 시뮬레이션합니다. (await를 사용하여 비동기 작업을 기다립니다)
     await new Promise(resolve => setTimeout(resolve, 1500));
 
       const botResponse = {
@@ -82,6 +78,10 @@ const OrganismChatbotPopup = ({ isOpen, onClose }) => {
     }
   };
 
+  if (!isOpen) {
+    return null;
+  }
+
   return (
     <PopupOverlay onClick={onClose}>
       <PopupContainer 
@@ -93,11 +93,7 @@ const OrganismChatbotPopup = ({ isOpen, onClose }) => {
         <Header>
           <Title>AI 챗봇</Title>
         </Header>
-        <Contents 
-          ref={contentsRef} 
-          // 팝업이 열릴 때 스크롤 점프 현상을 막기 위해 초기에는 숨깁니다.
-          style={{ opacity: isOpen ? 1 : 0, transition: 'opacity 0.1s' }}
-        >
+        <Contents ref={contentsRef}>
           {messages.map((msg) => (
             <ChatItem key={msg.id} sender={msg.sender}>
               <ChatBox sender={msg.sender}>
@@ -194,7 +190,7 @@ const Contents = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  scroll-behavior: smooth;
+  scroll-behavior: auto; /* 부드러운 스크롤 효과 제거 */
   overscroll-behavior: contain; /* 스크롤 체이닝 방지 */
 `;
 
