@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Unity, useUnityContext } from "react-unity-webgl";
 import styled from 'styled-components'; 
-import ChatbotPopup from '../components/oraganisms/OrganismChatbotPopup.jsx';
-import BriefingPopup from '../components/oraganisms/OrganismBriefingPopup.jsx';
+import ChatbotPopup from '../components/oraganisms/OrganismChatbotPopup.jsx';
+import BriefingPopup from '../components/oraganisms/OrganismBriefingPopup.jsx';
 
 const UnityPlayer = () => {
   const { unityProvider, isLoaded, loadingProgression } = useUnityContext({
